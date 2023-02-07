@@ -48,4 +48,4 @@ distbase = int(shalf[0])*60 + int(shalf[1])
 distsub = int(sect[0])*60 + int(sect[1])
 dist = distbase - distsub
 print(f"Period {period}")
-print(f"{dist} Minutes and {60 - int(sect[2])} Seconds until Next Period at {halfsies[1]}")
+print(f"{dist - 1} Minutes and {60 - int(sect[2])} Seconds until Next Period at {halfsies[1]}")
