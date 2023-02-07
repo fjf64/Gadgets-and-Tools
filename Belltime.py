@@ -32,20 +32,26 @@ csr = {
     "n":normal,
     "2":two_delay
 }
-pp = t.asctime()
-current_time = pp[11:19]
-sect = current_time.split(":")
-sect[0] = str(int(sect[0]) - 5)
 day = input("[a] Advisory || [n] Normal || [2] Two Hour Delay")
-for x in csr[day]:
-    halfsies = csr[day][x].split("-")
-    fhalf = halfsies[0].split(":")
-    shalf = halfsies[1].split(":")
-    period = x
-    if int(fhalf[0]) <= int(sect[0]) <= int(shalf[0]) and int(fhalf[1]) <= int(sect[1]) <= int(shalf[1]) or int(fhalf[0]) <= int(sect[0]) <= int(shalf[0]) and int(sect[1]) <= int(shalf[1]):
-        break
-distbase = int(shalf[0])*60 + int(shalf[1])
-distsub = int(sect[0])*60 + int(sect[1])
-dist = distbase - distsub
-print(f"Period {period}")
-print(f"{dist - 1} Minutes and {60 - int(sect[2])} Seconds until Next Period at {halfsies[1]}")
+while True:
+    pp = t.asctime()
+    current_time = pp[11:19]
+    sect = current_time.split(":")
+    sect[0] = str(int(sect[0]) - 5)
+    for x in csr[day]:
+        halfsies = csr[day][x].split("-")
+        fhalf = halfsies[0].split(":")
+        shalf = halfsies[1].split(":")
+        period = x
+        if int(fhalf[0])*60 + int(fhalf[1]) <= int(sect[0])*60 + int(sect[1]) <= int(shalf[0])*60 + int(shalf[1]): # FIX
+            break
+    distbase = int(shalf[0])*60 + int(shalf[1])
+    distsub = int(sect[0])*60 + int(sect[1])
+    dist = distbase - distsub
+    #Add if over 120 mins
+    if dist > 60:
+        print("Currently during break.")
+    else:
+        print(f"Period {period}")
+        print(f"{dist - 1} Minutes and {60 - int(sect[2])} Seconds until Next Period at {halfsies[1]}")
+    t.sleep(1)
