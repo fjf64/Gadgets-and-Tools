@@ -28,11 +28,11 @@ two_delay = {
     7:"14:54-15:30",
 }
 csr = {
-    "a":advisory,
-    "n":normal,
-    "2":two_delay
+    "1":advisory,
+    "2":normal,
+    "3":two_delay
 }
-day = input("[a] Advisory || [n] Normal || [2] Two Hour Delay")
+day = input("[1] Advisory || [2] Normal || [3] Two Hour Delay")
 while True:
     pp = t.asctime()
     current_time = pp[11:19]
