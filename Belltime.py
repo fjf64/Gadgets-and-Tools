@@ -1,4 +1,5 @@
 import time as t
+# Bell Calculator 1.1
 advisory = {
     1:"8:30-9:18",
     2:"9:22-10:09",
@@ -33,6 +34,11 @@ csr = {
     "3":two_delay
 }
 day = input("[1] Advisory || [2] Normal || [3] Two Hour Delay")
+if day == "":
+    if t.asctime()[0:3] == "Mon":
+        day = "1"
+    else:
+        day = "2"
 while True:
     pp = t.asctime()
     current_time = pp[11:19]
@@ -43,13 +49,13 @@ while True:
         fhalf = halfsies[0].split(":")
         shalf = halfsies[1].split(":")
         period = x
-        if int(fhalf[0])*60 + int(fhalf[1]) <= int(sect[0])*60 + int(sect[1]) <= int(shalf[0])*60 + int(shalf[1]): # FIX
+        if int(fhalf[0])*60 + int(fhalf[1]) <= int(sect[0])*60 + int(sect[1]) <= int(shalf[0])*60 + int(shalf[1]):
             break
     distbase = int(shalf[0])*60 + int(shalf[1])
     distsub = int(sect[0])*60 + int(sect[1])
     dist = distbase - distsub
-    #Add if over 120 mins
-    if dist > 60:
+    #Add if negative
+    if dist > 60 or dist < 0:
         print("Currently during break.")
     else:
         print(f"Period {period}")
