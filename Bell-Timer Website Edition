@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<script>
+  let advisory = {
+    1: "8:30-9:18",
+    2: "9:22-10:09",
+    3: "10:13-11:00",
+    4: "11:04-11:51",
+    5: "12:25-13:12",
+    "adv": "13:16-13:47",
+    6: "13:51-14:38",
+    7: "14:42-15:30",
+  }
+  let normal = {
+    1: "8:30-9:23",
+    2: "9:27-10:19",
+    3: "10:23-11:15",
+    4: "11:19-12:11",
+    5: "12:45-13:37",
+    6: "13:41-14:33",
+    7: "14:37-15:30",
+  }
+  let two_delay = {
+    1: "10:30-11:05",
+    2: "11:09-11:44",
+    3: "12:18-12:53",
+    4: "12:57-13:32",
+    5: "13:36-14:11",
+    6: "14:15-14:50",
+    7: "14:54-15:30",
+  }
+  var two = 0
+  var text = 1
+  var seconds_left = 0
+  var period_pick = 0
+
+  function refresh() {
+    var big_boy_size = document.getElementById("form").value;
+    document.getElementById("data2").style.fontSize = big_boy_size + "vw";
+
+    var broken = "no"
+    let p = Date()
+    document.getElementById("data").innerHTML = p;
+    var day = p.slice(0, 3);
+    let a = p.slice(16, 24);
+    const pp = a.split(":")
+    let hour = parseInt(pp[0])
+    let minute = parseInt(pp[1])
+    let second = parseInt(pp[2])
+    if (two == 0 && day == "Mon") {
+      var chooser = advisory;
+      var chooser_type = "advisory";
+    }
+    if (two == 0 && day !== "Mon") {
+      var chooser = normal;
+      var chooser_type = "normal";
+    }
+    if (two == 1) {
+      var chooser = two_delay;
+      var chooser_type = "two";
+    }
+    for (i in chooser) {
+      var halfsies = chooser[i].split("-");
+      var fhalf = halfsies[0].split(":");
+      var shalf = halfsies[1].split(":");
+      var period = i;
+      if (parseInt(fhalf[0]) * 60 + parseInt(fhalf[1]) <= hour * 60 + minute && hour * 60 + minute <= parseInt(shalf[0]) * 60 + parseInt(shalf[1]) && period_pick != 3) {
+        broken = "yes";
+        break;
+      }
+      if (parseInt(fhalf[0]) * 60 + parseInt(fhalf[1]) >= hour * 60 + minute && period_pick == 3) {
+      broken = "yes";
+      period = old_i
+        break;
+      }
+      old_i = i
+    }
+    if (period_pick !== 3) {
+    var distbase = parseInt(shalf[0]) * 60 + parseInt(shalf[1]);
+    var distsub = parseInt(hour) * 60 + parseInt(minute);
+    var dist = distbase - distsub;
+    } else {
+    	if (period == 5 && chooser_type == "advisory") {
+      var halfsies = chooser["adv"].split("-");
+      period = "adv"
+      } else {
+      if (period == "adv") {
+      var halfsies = chooser[6].split("-");
+      period = 6
+      } else{
+      		if (period == 7) {
+          var halfsies = chooser[1].split("-");
+          period = 1
+          } else {
+            var halfsies = chooser[parseInt(period) + 1].split("-");
+            period = parseInt(period) + 1
+            }
+      }
+      var fhalf = halfsies[0].split(":");
+      var shalf = halfsies[1].split(":");
+      if (period_pick == 3) {
+      var distbase = parseInt(fhalf[0]) * 60 + parseInt(fhalf[1])
+      var distsub = parseInt(hour) * 60 + parseInt(minute)
+      	var dist = distbase - distsub
+      } else {
+      var distbase = parseInt(shalf[0]) * 60 + parseInt(shalf[1])
+      var distsub = parseInt(hour) * 60 + parseInt(minute)
+      var dist = distbase - distsub
+      }
+    }
+    }
+    if (broken != "yes") {
+      document.getElementById("data2").innerHTML = "Break"
+      document.getElementById("data1").innerHTML = "Currently no Period";
+      document.getElementById("data3").innerHTML = "";
+      if (text == 0) {
+        document.getElementById("next_period").innerHTML = "";
+        document.getElementById("data1").innerHTML = "";
+        document.getElementById("data").innerHTML = "";
+
+      }
+    } else {
+      if (60 - second < 10) {
+        seconds_left = "0" + (60 - second).toString();
+      } else {
+        if (60 - second == 60) {
+          seconds_left = "00";
+          dist += 1
+        } else {
+          seconds_left = (60 - second).toString();
+        }
+      }
+      document.getElementById("data2").innerHTML = (dist - 1).toString() + ":" + seconds_left;
+      document.getElementById("data1").innerHTML = "Period " + period.toString();
+      document.getElementById("data3").innerHTML = "<br> Next Period at " + shalf[0].toString() + ":" + shalf[1].toString();
+      if (text == 0) {
+        document.getElementById("next_period").innerHTML = "";
+        document.getElementById("data2").innerHTML = (dist - 1).toString() + ":" + seconds_left;
+        document.getElementById("data").innerHTML = "";
+        document.getElementById("data1").innerHTML = "";
+        document.getElementById("data3").innerHTML = "";
+      }
+    }
+  }
+
+  function two_switch() {
+    var chec = "no"
+    if (two == 0) {
+      two = 1;
+      var chec = "yes"
+      document.getElementById("butto").style.backgroundColor = "#000000";
+      document.getElementById("butto").style.color = "#FFFFFF";
+    }
+    if (two == 1 && chec == "no") {
+      two = 0;
+      document.getElementById("butto").style.backgroundColor = null;
+      document.getElementById("butto").style.color = null;
+    }
+  }
+
+  function hide_text() {
+    var chec = "no"
+    if (text == 1) {
+      text = 0;
+      var chec = "yes"
+      document.getElementById("butt").style.backgroundColor = "#000000";
+      document.getElementById("butt").style.color = "#FFFFFF";
+    }
+    if (text == 0 && chec == "no") {
+      text = 1;
+      document.getElementById("next_period").innerHTML = "Your Next Period is In:";
+      document.getElementById("butt").style.backgroundColor = null;
+      document.getElementById("butt").style.color = null;
+    }
+  }
+
+  function break_hide() {
+    var x = document.getElementById("buttons");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+      text = 1;
+      document.getElementById("next_period").innerHTML = "Your Next Period is In:";
+      document.getElementById("butt").style.backgroundColor = "#FFFFFF";
+      document.getElementById("butt").style.color = "#000000";
+    } else {
+      x.style.display = "none";
+      text = 0;
+      document.getElementById("next_period").innerHTML = "";
+    }
+  }
+
+  function period_picker_a() {
+    if (period_pick !== 1) {
+      document.getElementById("picker_a").style.backgroundColor = "#000000";
+      document.getElementById("picker_a").style.color = "#FFFFFF";
+      /*document.getElementById("picker_b").style.backgroundColor = null;
+      document.getElementById("picker_b").style.color = null; */
+      document.getElementById("picker_c").style.backgroundColor = null;
+      document.getElementById("picker_c").style.color = null;
+      period_pick = 1
+    }
+  }
+
+  function period_picker_b() {
+    if (period_pick !== 2) {
+      document.getElementById("picker_b").style.backgroundColor = "#000000";
+      document.getElementById("picker_b").style.color = "#FFFFFF";
+      document.getElementById("picker_a").style.backgroundColor = null;
+      document.getElementById("picker_a").style.color = null;
+      document.getElementById("picker_c").style.backgroundColor = null;
+      document.getElementById("picker_c").style.color = null;
+      period_pick = 2
+    }
+  }
+
+  function period_picker_c() {
+    if (period_pick !== 3) {
+      document.getElementById("picker_c").style.backgroundColor = "#000000";
+      document.getElementById("picker_c").style.color = "#FFFFFF";
+      document.getElementById("picker_a").style.backgroundColor = null;
+      document.getElementById("picker_a").style.color = null;
+      /*document.getElementById("picker_b").style.backgroundColor = null;
+      document.getElementById("picker_b").style.color = null; */
+      period_pick = 3
+    }
+  }
+
+</script>
+<style>
+  body {
+    background-color: #101010;
+  }
+
+  .container {
+    height: 25px;
+    position: sticky;
+  }
+
+  .center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .bottom {
+    position: fixed;
+    bottom: 0;
+    width: 97%;
+    text-align: right;
+  }
+
+  .button {
+    cursor: cell;
+    border-style: solid;
+    border-width: 2px;
+    border-color: grey;
+    border-radius: 7px;
+    display: inline-block;
+  }
+
+  .button:hover {
+    background-color: #FF8300;
+    color: black;
+    transition: 0.25s;
+  }
+
+  .btn-group button {
+    background-color: white;
+    border: 1px solid grey;
+    /* Green border */
+    color: black;
+    /* White text */
+    width: 50%;
+    padding: 5px;
+    /* Some padding */
+    cursor: cell;
+    border-radius: 7px;
+    display: inline-block;
+  }
+
+  .btn-group button:not(:last-child) {
+    border-right: none;
+    /* Prevent double borders */
+  }
+
+  /* Clear floats (clearfix hack) */
+  .btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  /* Add a background color on hover */
+  .btn-group button:hover {
+    background-color: #FF8300;
+    color: black;
+    transition: 0.25s;
+  }
+
+</style>
+<!-- || typeof two == 'undefined'></!-->
+<html>
+
+  <body onload="refresh()">
+    <center id="next_period" style="font-family:arial;color:white;">Your Next Period is In: </center>
+    <center id="data2" style="font-family:arial;font-size:250px;;color:white;" onclick="break_hide()"></center>
+    <center id="data" style="font-family:arial;color:white;"></center>
+    <center id="data1" style="font-family:arial;color:white;"></center>
+    <center id="data3" style="font-family:arial;color:white;"></center>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <div class="container" id="buttons">
+      <div class="center">
+        <button onclick="two_switch()" style="font-family:arial;" id="butto" class="button" data-inline="true">Click Me for Two Hour Delay</button>
+        <button onclick="hide_text()" style="font-family:arial;" id="butt" class="button" data-inline="true">Click Me to Simplify Screen</button>
+        <p style="font-family:arial;color:white;">text-size:<input type="text" name="fname" value="38" size="2" class="button" maxlength="4" id="form"></p>
+        <div class="btn-group">
+          <button id="picker_a" onclick="period_picker_a()">End of this period</button>
+          <!--<button id="picker_b" onclick="period_picker_b()">Automatic</button> ></!-->
+          <button id="picker_c" onclick="period_picker_c()">Start of next Period</button>
+        </div>
+
+        <p style="font-family:arial;color:white;">Click timer to toggle all other text</p>
+        <div class="btn-group">
+        </div>
+
+      </div>
+    </div>
+    <br><br>
+    <div class="bottom">
+      <p style="color:white;">By fjf64</p>
+    </div>
+    <script>
+      let updateIntervalId_a = setInterval(refresh, 50);
+      if (typeof onetime == 'undefined') {
+        period_picker_a()
+        onetime = "done"
+      }
+
+    </script>
+  </body>
+
+</html>
